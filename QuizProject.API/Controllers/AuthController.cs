@@ -21,6 +21,7 @@ public class AuthController : ControllerBase
         _tokenGenerator = tokenGenerator;
     }
     
+    [HttpPost("register")]
     public async Task<IActionResult> Register([FromForm] RegisterRequest request)
     {
         var user = request.MapToUser();
