@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizProject.Contracts", "QuizProject.Contracts\QuizProject.Contracts.csproj", "{AC92A522-DEC7-4A26-A734-950E440A1F99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizProject.Application", "QuizProject.Application\QuizProject.Application.csproj", "{B3D2705F-0686-432F-B874-708642780A8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizProject.API", "QuizProject.API\QuizProject.API.csproj", "{EB30C029-BADF-4C70-839A-553AA0280736}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC92A522-DEC7-4A26-A734-950E440A1F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC92A522-DEC7-4A26-A734-950E440A1F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC92A522-DEC7-4A26-A734-950E440A1F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC92A522-DEC7-4A26-A734-950E440A1F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3D2705F-0686-432F-B874-708642780A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D2705F-0686-432F-B874-708642780A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D2705F-0686-432F-B874-708642780A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D2705F-0686-432F-B874-708642780A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB30C029-BADF-4C70-839A-553AA0280736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB30C029-BADF-4C70-839A-553AA0280736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB30C029-BADF-4C70-839A-553AA0280736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB30C029-BADF-4C70-839A-553AA0280736}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
