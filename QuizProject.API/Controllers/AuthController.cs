@@ -120,7 +120,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("logout/{id}")]
-    public async Task<IActionResult> Logout([FromRoute] Guid id)
+    public async Task<IActionResult> Logout([FromRoute] int id)
     {
         try
         {
