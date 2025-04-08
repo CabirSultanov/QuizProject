@@ -11,5 +11,5 @@ public interface IUserRepository
     Task CreateRefreshTokenAsync(RefreshToken refreshToken);
     Task<RefreshToken> GetRefreshTokenAsync(string token);
     Task RemoveRefreshTokenAsync(string token);
-    Task RemoveAllRefreshTokensAsync(Guid userId);
+    Task RemoveAllRefreshTokensAsync(int userId);
 }

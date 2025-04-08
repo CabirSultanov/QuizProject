@@ -98,7 +98,7 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task RemoveAllRefreshTokensAsync(Guid userId)
+    public async Task RemoveAllRefreshTokensAsync(int userId)
     {
         var tokens = await _context.RefreshTokens.Where(t => t.UserId == userId).ToListAsync();
         if (tokens is null || !tokens.Any())
