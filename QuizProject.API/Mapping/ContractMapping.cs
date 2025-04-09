@@ -19,4 +19,32 @@ public static class ContractMapping
             RoleId = request.RoleId,
         };
     }
+    
+    public static Quiz MapToQuiz(this CreateQuizRequest request)
+    {
+        return new Quiz
+        {
+            Title = request.Title,
+            Description = request.Description
+        };
+    }
+    
+    public static Question MapToQuestion(this CreateQuestionRequest request)
+    {
+        return new Question
+        {
+            Text = request.Text,
+            QuizId = request.QuizId
+        };
+    }
+
+    public static Answer MapToAnswer(this CreateAnswerRequest request, int questionId)
+    {
+        return new Answer
+        {
+            Text = request.Text,
+            IsCorrect = request.IsCorrect,
+            QuestionId = questionId
+        };
+    }
 }
