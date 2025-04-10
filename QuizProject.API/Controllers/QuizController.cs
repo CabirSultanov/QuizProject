@@ -120,6 +120,7 @@ public class QuizController : ControllerBase
             var quiz = await _quizRepo.GetQuizByIdAsync(id);
             
             quiz!.Title = request.Title;
+            quiz.Description = request.Description;
             await _quizRepo.UpdateQuizAsync(quiz);
             
             return Ok(quiz);
