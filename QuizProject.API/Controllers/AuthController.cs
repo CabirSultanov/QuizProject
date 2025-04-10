@@ -26,7 +26,16 @@ public class AuthController : ControllerBase
         _loginValidator = loginValidator;
     }
     
+    /// <summary>
+    /// Create a user
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromForm] RegisterRequest request)
     {
         await _registerValidator.ValidateAndThrowAsync(request);
@@ -48,7 +57,16 @@ public class AuthController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Login user and generate a pair of tokens
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Login([FromForm] LoginRequest request)
     {
         try
@@ -87,7 +105,16 @@ public class AuthController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Generate a new pair of tokens
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("refresh")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
     {
         try
@@ -129,7 +156,16 @@ public class AuthController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Clear all refresh tokens
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpPost("logout/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Logout([FromRoute] int id)
     {
         try

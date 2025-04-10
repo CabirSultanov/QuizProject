@@ -25,14 +25,32 @@ public class QuizController : ControllerBase
         _answerRepo = answerRepo;
     }
     
+    /// <summary>
+    /// Get all quizzes
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetQuizzes()
     {
         var quizzes = await _quizRepo.GetQuizzesAsync();
         return quizzes.Any() ? Ok(quizzes) : NoContent();
     }
     
+    /// <summary>
+    /// Get one quiz by ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetQuiz(int id)
     {
         try
@@ -50,7 +68,18 @@ public class QuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Create a quiz
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
     {
@@ -70,7 +99,19 @@ public class QuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Update an existing quiz
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateQuiz(int id, [FromBody] UpdateQuizRequest request)
     {
@@ -93,7 +134,17 @@ public class QuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Delete a quiz
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteQuiz(int id)
     {
@@ -112,7 +163,17 @@ public class QuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Get all questions of a specific quiz
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("question/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetQuestion(int id)
     {
         try
@@ -130,12 +191,18 @@ public class QuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Create a question with answers
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("question")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)
     {
