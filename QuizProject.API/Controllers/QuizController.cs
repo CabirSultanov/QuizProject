@@ -136,7 +136,7 @@ public class QuizController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)
     {
         if (!request.Answers.Any(a => a.IsCorrect))
