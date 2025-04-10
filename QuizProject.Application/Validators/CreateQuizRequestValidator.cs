@@ -1,7 +1,7 @@
 using FluentValidation;
-using Novademy.Contracts.Requests.Quiz;
+using QuizProject.Contracts.Requests;
 
-namespace Novademy.Application.Validators.Quiz;
+namespace QuizProject.Application.Validators;
 
 public class CreateQuizRequestValidator : AbstractValidator<CreateQuizRequest>
 {
@@ -9,8 +9,5 @@ public class CreateQuizRequestValidator : AbstractValidator<CreateQuizRequest>
     {
         RuleFor(x => x.Title)
             .NotEmpty().WithMessage("Title is required.");
-        
-        RuleFor(x => x.LessonId)
-            .NotEmpty().WithMessage("Lesson ID is required.");
     }
 }

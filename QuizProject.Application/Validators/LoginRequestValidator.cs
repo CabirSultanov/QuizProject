@@ -1,8 +1,7 @@
 using FluentValidation;
-using QuizProject.Contracts.Requests.Auth;
 using QuizProject.Contracts.Requests;
 
-namespace QuizProject.Application.Validators.Auth;
+namespace QuizProject.Application.Validators;
 
 public class LoginRequestValidator  : AbstractValidator<LoginRequest>
 {

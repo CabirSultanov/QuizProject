@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using QuizProject.Application.Models;
 using QuizProject.Application.Repositories.Abstract;
@@ -14,16 +15,22 @@ public class AuthController : ControllerBase
 {
     private readonly IUserRepository _repo;
     private readonly ITokenGenerator _tokenGenerator;
+    private readonly IValidator<RegisterRequest> _registerValidator;
+    private readonly IValidator<LoginRequest> _loginValidator;
     
-    public AuthController(IUserRepository repo, ITokenGenerator tokenGenerator)
+    public AuthController(IUserRepository repo, ITokenGenerator tokenGenerator, IValidator<RegisterRequest> registerValidator, IValidator<LoginRequest> loginValidator)
     {
         _repo = repo;
         _tokenGenerator = tokenGenerator;
+        _registerValidator = registerValidator;
+        _loginValidator = loginValidator;
     }
     
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromForm] RegisterRequest request)
     {
+        await _registerValidator.ValidateAndThrowAsync(request);
+        
         var user = request.MapToUser();
         try
         {
@@ -46,6 +53,8 @@ public class AuthController : ControllerBase
     {
         try
         {
+            await _loginValidator.ValidateAndThrowAsync(request);
+            
             var user = await _repo.LoginUserAsync(request.Username, request.Password);
             
             await _repo.UpdateUserAsync(user);

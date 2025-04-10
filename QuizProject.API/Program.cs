@@ -1,4 +1,5 @@
 using System.Text;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +8,7 @@ using QuizProject.Application.Data;
 using QuizProject.Application.Repositories.Abstract;
 using QuizProject.Application.Repositories.Concrete;
 using QuizProject.Application.Tokens;
+using QuizProject.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,7 @@ builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 
 builder.Services.AddSingleton<ITokenGenerator, TokenGenerator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
         
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
