@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using QuizProject.Application.Cloudinary;
 using QuizProject.Application.Data;
 using QuizProject.Application.Models;
 using QuizProject.Application.Repositories.Abstract;
@@ -8,14 +10,22 @@ namespace QuizProject.Application.Repositories.Concrete;
 public class QuizRepository : IQuizRepository
 {
     private readonly AppDbContext _context;
+    private readonly IMediaUpload _mediaUpload;
     
-    public QuizRepository(AppDbContext context)
+    public QuizRepository(AppDbContext context, IMediaUpload mediaUpload)
     {
         _context = context;
+        _mediaUpload = mediaUpload;
     }
     
-    public async Task<Quiz> CreateQuizAsync(Quiz quiz)
+    public async Task<Quiz> CreateQuizAsync(Quiz quiz, IFormFile? image)
     {
+        if (image is not null)
+        {
+            var uploadResult = await _mediaUpload.UploadImageAsync(image, "quiz");
+            quiz.ImageUrl = uploadResult.SecureUrl.ToString();
+        }
+        
         _context.Quizzes.Add(quiz);
         await _context.SaveChangesAsync();
         
@@ -42,8 +52,14 @@ public class QuizRepository : IQuizRepository
             .FirstOrDefaultAsync(q => q.Id == id);
     }
     
-    public async Task<Quiz?> UpdateQuizAsync(Quiz quiz)
+    public async Task<Quiz?> UpdateQuizAsync(Quiz quiz, IFormFile? image)
     {
+        if (image is not null)
+        {
+            var uploadResult = await _mediaUpload.UploadImageAsync(image, "quiz");
+            quiz.ImageUrl = uploadResult.SecureUrl.ToString();
+        }
+        
         _context.Quizzes.Update(quiz);
         await _context.SaveChangesAsync();
         return quiz;

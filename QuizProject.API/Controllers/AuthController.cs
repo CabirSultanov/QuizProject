@@ -43,7 +43,7 @@ public class AuthController : ControllerBase
         var user = request.MapToUser();
         try
         {
-            var registeredUser = await _repo.RegisterUserAsync(user);
+            var registeredUser = await _repo.RegisterUserAsync(user, request.Image);
             return CreatedAtAction(nameof(Register), new { id = registeredUser.Id },
                 $"User with ID {registeredUser.Id} registered successfully.");
         }

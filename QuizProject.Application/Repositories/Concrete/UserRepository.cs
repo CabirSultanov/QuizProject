@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using QuizProject.Application.Cloudinary;
 using QuizProject.Application.Data;
 using QuizProject.Application.Helpers;
 using QuizProject.Application.Models;
@@ -9,13 +11,15 @@ namespace QuizProject.Application.Repositories.Concrete;
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _context;
+    private readonly IMediaUpload _mediaUpload;
     
-    public UserRepository(AppDbContext context)
+    public UserRepository(AppDbContext context, IMediaUpload mediaUpload)
     {
         _context = context;
+        _mediaUpload = mediaUpload;
     }
     
-    public async Task<User> RegisterUserAsync(User user)
+    public async Task<User> RegisterUserAsync(User user, IFormFile? image)
     {
         if (await _context.Users.AnyAsync(u => u.Username == user.Username))
         {
@@ -33,6 +37,12 @@ public class UserRepository : IUserRepository
         }
         
         user.Password = Hasher.HashPassword($"{user.Password}{user.Salt}");
+        
+        if (image is not null)
+        {
+            var uploadResult = await _mediaUpload.UploadImageAsync(image, "user");
+            user.ImageUrl = uploadResult.SecureUrl.ToString();
+        }
         
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();

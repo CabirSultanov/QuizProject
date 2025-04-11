@@ -11,4 +11,5 @@ public class RegisterRequest
     public required string Email { get; init; }
     public required string PhoneNumber { get; init; }
     public required int RoleId { get; init; }
+    public IFormFile? Image { get; init; }
 }

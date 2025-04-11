@@ -86,7 +86,7 @@ public class QuizController : ControllerBase
         var quiz = request.MapToQuiz();
         try
         {
-            var createdQuiz = await _quizRepo.CreateQuizAsync(quiz);
+            var createdQuiz = await _quizRepo.CreateQuizAsync(quiz, request.Image);
             return CreatedAtAction(nameof(GetQuiz), new { id = createdQuiz.Id }, createdQuiz);
         }
         catch (KeyNotFoundException ex)
@@ -121,7 +121,7 @@ public class QuizController : ControllerBase
             
             quiz!.Title = request.Title;
             quiz.Description = request.Description;
-            await _quizRepo.UpdateQuizAsync(quiz);
+            await _quizRepo.UpdateQuizAsync(quiz, request.Image);
             
             return Ok(quiz);
         }
