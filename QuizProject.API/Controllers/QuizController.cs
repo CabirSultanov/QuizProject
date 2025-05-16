@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizProject.Application.Repositories.Abstract;
 using QuizProject.Contracts.Requests;
@@ -8,6 +9,7 @@ namespace QuizProject.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class QuizController : ControllerBase
 {
     private readonly IQuizRepository _quizRepo;
@@ -238,30 +240,6 @@ public class QuizController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
-        }
-    }
-    
-    [HttpGet("random")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetRandomQuiz(int difficulty)
-    {
-        try
-        {
-            var quiz = await _quizRepo.GetRandomQuizByDifficultyAsync(difficulty);
-
-            return Ok(quiz);
-        }
-        catch (ApplicationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
         }
     }
 }

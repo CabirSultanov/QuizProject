@@ -14,4 +14,5 @@ public class UserQuizAttempt
     [Required]
     public int QuizId { get; set; }
     public Quiz? Quiz { get; set; }
+    public ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
 }
