@@ -30,6 +30,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+builder.Services.AddScoped<IUserQuizAttemptRepository, UserQuizAttemptRepository>();
 
 builder.Services.AddSingleton<ITokenGenerator, TokenGenerator>();
 
