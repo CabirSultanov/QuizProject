@@ -8,12 +8,12 @@ using QuizProject.Application.Repositories.Abstract;
 
 namespace QuizProject.Application.Repositories.Concrete;
 
-public class UserRepository : IUserRepository
+public class AuthRepository : IAuthRepository
 {
     private readonly AppDbContext _context;
     private readonly IMediaUpload _mediaUpload;
     
-    public UserRepository(AppDbContext context, IMediaUpload mediaUpload)
+    public AuthRepository(AppDbContext context, IMediaUpload mediaUpload)
     {
         _context = context;
         _mediaUpload = mediaUpload;

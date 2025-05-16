@@ -3,7 +3,7 @@ using QuizProject.Application.Models;
 
 namespace QuizProject.Application.Repositories.Abstract;
 
-public interface IUserRepository
+public interface IAuthRepository
 {
     Task<User> RegisterUserAsync(User user, IFormFile? image);
     Task<User> LoginUserAsync(string username, string password);

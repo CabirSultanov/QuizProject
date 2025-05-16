@@ -13,12 +13,12 @@ namespace QuizProject.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IUserRepository _repo;
+    private readonly IAuthRepository _repo;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<LoginRequest> _loginValidator;
     
-    public AuthController(IUserRepository repo, ITokenGenerator tokenGenerator, IValidator<RegisterRequest> registerValidator, IValidator<LoginRequest> loginValidator)
+    public AuthController(IAuthRepository repo, ITokenGenerator tokenGenerator, IValidator<RegisterRequest> registerValidator, IValidator<LoginRequest> loginValidator)
     {
         _repo = repo;
         _tokenGenerator = tokenGenerator;

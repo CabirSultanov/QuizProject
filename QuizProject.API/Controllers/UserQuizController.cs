@@ -10,12 +10,12 @@ namespace QuizProject.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = "User")]
-public class QuizTakingController : ControllerBase
+public class UserQuizController : ControllerBase
 {
     private readonly IQuizRepository _quizRepo;
     private readonly IUserQuizAttemptRepository _userQuizAttemptRepo;
     
-    public QuizTakingController(IQuizRepository quizRepo, IUserQuizAttemptRepository userQuizAttemptRepo)
+    public UserQuizController(IQuizRepository quizRepo, IUserQuizAttemptRepository userQuizAttemptRepo)
     {
         _quizRepo = quizRepo;
         _userQuizAttemptRepo = userQuizAttemptRepo;
