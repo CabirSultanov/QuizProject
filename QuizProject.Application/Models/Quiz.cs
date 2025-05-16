@@ -10,6 +10,8 @@ public class Quiz
     public string Title { get; set; }
     [Required]
     public string Description { get; set; }
+    [Required]
+    public int DifficultyLevel { get; set; }
     public string? ImageUrl { get; set; }
     public ICollection<Question> Questions { get; set; } = new List<Question>();
 }

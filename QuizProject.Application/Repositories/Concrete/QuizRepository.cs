@@ -77,4 +77,27 @@ public class QuizRepository : IQuizRepository
         _context.Quizzes.Remove(quiz);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task<Quiz?> GetRandomQuizByDifficultyAsync(int difficulty)
+    {
+        if (difficulty < 1 || difficulty > 3)
+        {
+            throw new ApplicationException("Difficulty must be between 1 and 3.");
+        }
+        
+        var quizzes = await _context.Quizzes
+            .Where(q => q.DifficultyLevel == difficulty)
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.Answers)
+            .ToListAsync();
+        
+        if (!quizzes.Any())
+        {
+            throw new KeyNotFoundException("No quiz found with the specified difficulty.");
+        }
+        
+        var random = new Random();
+        var index = random.Next(quizzes.Count);
+        return quizzes[index];
+    }
 }

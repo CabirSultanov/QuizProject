@@ -6,5 +6,6 @@ public class UpdateQuizRequest
 {
     public required string Title { get; init; }
     public required string Description { get; init; }
+    public int DifficultyLevel { get; init; }
     public IFormFile? Image { get; init; }
 }

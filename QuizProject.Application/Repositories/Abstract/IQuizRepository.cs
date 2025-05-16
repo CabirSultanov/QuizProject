@@ -10,4 +10,5 @@ public interface IQuizRepository
     Task<Quiz?> GetQuizByIdAsync(int id);
     Task<Quiz?> UpdateQuizAsync(Quiz quiz, IFormFile? image);
     Task DeleteQuizAsync(int id);
+    Task<Quiz?> GetRandomQuizByDifficultyAsync(int difficulty);
 }
