@@ -77,7 +77,7 @@ public class QuizController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
+    public async Task<IActionResult> CreateQuiz([FromForm] CreateQuizRequest request)
     {
         await _createQuizValidator.ValidateAndThrowAsync(request);
         

@@ -186,6 +186,37 @@ namespace QuizProject.Application.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("QuizProject.Application.Models.UserAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SelectedAnswerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserQuizAttemptId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SelectedAnswerId");
+
+                    b.HasIndex("UserQuizAttemptId");
+
+                    b.ToTable("UserAnswers");
+                });
+
             modelBuilder.Entity("QuizProject.Application.Models.UserQuizAttempt", b =>
                 {
                     b.Property<int>("Id")
@@ -256,6 +287,33 @@ namespace QuizProject.Application.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("QuizProject.Application.Models.UserAnswer", b =>
+                {
+                    b.HasOne("QuizProject.Application.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizProject.Application.Models.Answer", "SelectedAnswer")
+                        .WithMany()
+                        .HasForeignKey("SelectedAnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizProject.Application.Models.UserQuizAttempt", "UserQuizAttempt")
+                        .WithMany("UserAnswers")
+                        .HasForeignKey("UserQuizAttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("SelectedAnswer");
+
+                    b.Navigation("UserQuizAttempt");
+                });
+
             modelBuilder.Entity("QuizProject.Application.Models.UserQuizAttempt", b =>
                 {
                     b.HasOne("QuizProject.Application.Models.Quiz", "Quiz")
@@ -283,6 +341,11 @@ namespace QuizProject.Application.Migrations
             modelBuilder.Entity("QuizProject.Application.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("QuizProject.Application.Models.UserQuizAttempt", b =>
+                {
+                    b.Navigation("UserAnswers");
                 });
 #pragma warning restore 612, 618
         }
