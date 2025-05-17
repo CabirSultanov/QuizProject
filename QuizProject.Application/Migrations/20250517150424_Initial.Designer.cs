@@ -12,7 +12,7 @@ using QuizProject.Application.Data;
 namespace QuizProject.Application.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250517133710_Initial")]
+    [Migration("20250517150424_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -10,6 +10,11 @@ Icon?
 .Trashes
 
 # ====================
+# Visual Studio IDE Files
+# ====================
+.vs/
+
+# ====================
 # Rider IDE Files
 # ====================
 .idea/

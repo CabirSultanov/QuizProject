@@ -9,7 +9,7 @@ namespace QuizProject.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class QuizController : ControllerBase
 {
     private readonly IQuizRepository _quizRepo;
@@ -77,6 +77,7 @@ public class QuizController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateQuiz([FromForm] CreateQuizRequest request)
     {
         await _createQuizValidator.ValidateAndThrowAsync(request);
@@ -130,6 +131,7 @@ public class QuizController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateQuiz(int id, [FromForm] UpdateQuizRequest request)
     {
         try
@@ -161,6 +163,7 @@ public class QuizController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteQuiz(int id)
     {
         try
