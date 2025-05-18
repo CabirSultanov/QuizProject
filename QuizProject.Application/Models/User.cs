@@ -24,4 +24,7 @@ public class User
     [Required]
     public int RoleId { get; set; }
     public Role? Role { get; set; }
+    public string? EmailVerificationCode { get; set; }
+    public DateTime? EmailVerificationExpiry { get; set; }
+    public bool IsEmailVerified { get; set; } = false;
 }

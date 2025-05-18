@@ -6,6 +6,7 @@ using QuizProject.Application.Tokens;
 using QuizProject.Contracts.Requests;
 using QuizProject.Contracts.Responses;
 using QuizProject.API.Mapping;
+using QuizProject.Application.Email;
 
 namespace QuizProject.API.Controllers;
 
@@ -17,13 +18,20 @@ public class AuthController : ControllerBase
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<LoginRequest> _loginValidator;
+    private readonly IEmailService _emailService;
     
-    public AuthController(IAuthRepository repo, ITokenGenerator tokenGenerator, IValidator<RegisterRequest> registerValidator, IValidator<LoginRequest> loginValidator)
+    public AuthController(
+        IAuthRepository repo,
+        ITokenGenerator tokenGenerator,
+        IValidator<RegisterRequest> registerValidator,
+        IValidator<LoginRequest> loginValidator,
+        IEmailService emailService)
     {
         _repo = repo;
         _tokenGenerator = tokenGenerator;
         _registerValidator = registerValidator;
         _loginValidator = loginValidator;
+        _emailService = emailService;
     }
     
     /// <summary>
@@ -44,8 +52,13 @@ public class AuthController : ControllerBase
         try
         {
             var registeredUser = await _repo.RegisterUserAsync(user, request.Image);
-            return CreatedAtAction(nameof(Register), new { id = registeredUser.Id },
-                $"User with ID {registeredUser.Id} registered successfully.");
+            
+            await _emailService.SendEmailAsync(
+                registeredUser.Email,
+                "Email Verification Code",
+                $"Your verification code is {registeredUser.EmailVerificationCode}");
+            
+            return CreatedAtAction(nameof(Register), new { id = registeredUser.Id }, new { userId = registeredUser.Id });
         }
         catch (ArgumentException ex)
         {
@@ -74,6 +87,11 @@ public class AuthController : ControllerBase
             await _loginValidator.ValidateAndThrowAsync(request);
             
             var user = await _repo.LoginUserAsync(request.Username, request.Password);
+            
+            if (!user.IsEmailVerified)
+            {
+                return BadRequest("Email not verified.");
+            }
             
             await _repo.UpdateUserAsync(user);
             
@@ -172,6 +190,46 @@ public class AuthController : ControllerBase
         {
             await _repo.RemoveAllRefreshTokensAsync(id);
             return Ok("User logged out.");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    /// <summary>
+    /// Verify user's email with code
+    /// </summary>
+    [HttpPost("verify-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
+    {
+        try
+        {
+            var user = await _repo.GetUserByIdAsync(request.UserId);
+            if (user.IsEmailVerified)
+            {
+                return BadRequest("Email already verified.");
+            }
+            if (user.EmailVerificationExpiry < DateTime.UtcNow)
+            {
+                return BadRequest("Verification code expired.");
+            }
+            if (user.EmailVerificationCode != request.Code)
+            {
+                return BadRequest("Invalid verification code.");
+            }
+            user.IsEmailVerified = true;
+            user.EmailVerificationCode = null;
+            user.EmailVerificationExpiry = null;
+            await _repo.UpdateUserAsync(user);
+            return Ok();
         }
         catch (KeyNotFoundException ex)
         {

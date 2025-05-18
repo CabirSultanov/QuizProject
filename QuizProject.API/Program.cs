@@ -14,6 +14,7 @@ using QuizProject.Application.Repositories.Concrete;
 using QuizProject.Application.Tokens;
 using QuizProject.Application.Validators;
 using System.Text.Json.Serialization;
+using QuizProject.Application.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IUserQuizAttemptRepository, UserQuizAttemptRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddSingleton<ITokenGenerator, TokenGenerator>();
 
@@ -45,6 +47,9 @@ builder.Services.AddSingleton<Cloudinary>(sp =>
 });
 
 builder.Services.AddSingleton<IMediaUpload, MediaUpload>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));

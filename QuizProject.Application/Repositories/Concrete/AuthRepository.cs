@@ -5,6 +5,7 @@ using QuizProject.Application.Data;
 using QuizProject.Application.Helpers;
 using QuizProject.Application.Models;
 using QuizProject.Application.Repositories.Abstract;
+using System;
 
 namespace QuizProject.Application.Repositories.Concrete;
 
@@ -43,6 +44,10 @@ public class AuthRepository : IAuthRepository
             var uploadResult = await _mediaUpload.UploadImageAsync(image, "user");
             user.ImageUrl = uploadResult.SecureUrl.ToString();
         }
+        
+        user.EmailVerificationCode = new Random().Next(1000, 10000).ToString();
+        user.EmailVerificationExpiry = DateTime.UtcNow.AddMinutes(15);
+        user.IsEmailVerified = false;
         
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
@@ -117,5 +122,19 @@ public class AuthRepository : IAuthRepository
         }
         _context.RefreshTokens.RemoveRange(tokens);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<User> GetUserByIdAsync(int userId)
+    {
+        var user = await _context.Users
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        
+        if (user is null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+        
+        return user;
     }
 }

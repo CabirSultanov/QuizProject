@@ -1,6 +1,8 @@
 using QuizProject.Application.Data;
 using QuizProject.Application.Models;
 using QuizProject.Application.Repositories.Abstract;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace QuizProject.Application.Repositories.Concrete;
 
@@ -18,5 +20,13 @@ public class UserQuizAttemptRepository : IUserQuizAttemptRepository
         _context.UserQuizAttempts.Add(attempt);
         await _context.SaveChangesAsync();
         return attempt;
+    }
+
+    public async Task<IEnumerable<UserQuizAttempt>> GetUserQuizAttemptsAsync(int userId)
+    {
+        return await _context.UserQuizAttempts
+            .Include(a => a.Quiz)
+            .Where(a => a.UserId == userId)
+            .ToListAsync();
     }
 }

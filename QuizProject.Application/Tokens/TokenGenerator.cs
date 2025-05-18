@@ -18,8 +18,8 @@ public class TokenGenerator : ITokenGenerator
     {
         var claims = new List<Claim>
         {
-            new("sub", user.Username),
-            new("id", user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.Username),
             new("role", user.Role!.Name),
         };
         

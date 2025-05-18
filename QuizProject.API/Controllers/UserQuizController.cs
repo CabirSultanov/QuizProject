@@ -9,7 +9,7 @@ namespace QuizProject.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "User")]
+[Authorize]
 public class UserQuizController : ControllerBase
 {
     private readonly IQuizRepository _quizRepo;
@@ -21,10 +21,15 @@ public class UserQuizController : ControllerBase
         _userQuizAttemptRepo = userQuizAttemptRepo;
     }
     
+    /// <summary>
+    /// Get one random quiz by difficulty level
+    /// </summary>
+    /// <param name="difficulty"></param>
+    /// <returns></returns>
     [HttpGet("random")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetRandomQuiz(int difficulty)
@@ -45,10 +50,16 @@ public class UserQuizController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Submit selected answers for a quiz
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     [HttpPost("{id}/submit")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> SubmitQuiz(int id, [FromBody] SubmitQuizRequest request)
@@ -96,5 +107,26 @@ public class UserQuizController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+    
+    /// <summary>
+    /// Get all quiz attempts of the current user
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("attempts")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetUserAttempts()
+    {
+        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+        var attempts = await _userQuizAttemptRepo.GetUserQuizAttemptsAsync(userId);
+        var result = attempts.Select(a => new
+        {
+            quizTitle = a.Quiz!.Title,
+            difficultyLevel = a.Quiz!.DifficultyLevel,
+            score = a.Score,
+            date = DateTime.UtcNow.ToString("o")
+        });
+        return Ok(result);
     }
 }
